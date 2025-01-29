@@ -9,13 +9,19 @@ void InputCapture::init() {
 }
 
 void InputCapture::handleInputCapture() {
-  uint32_t previousTimestamp = capturedTimestamp;
-  capturedTimestamp = ((uint32_t)(overflowCount*TCNT_MAX_VALUE)) + ICR1;
-  if (capturedTimestamp > previousTimestamp) {
-    uptime = capturedTimestamp - previousTimestamp;
-  } 
-  overflowCount = 0;
-  ICR1 = 0;
+  if (cycleStart) {
+    capturedTimestamp = ((uint32_t)overflowCount*TCNT_MAX_VALUE) + ICR1;
+    cycleStart = false;
+  } else {
+    uint32_t previousTimestamp = capturedTimestamp;
+    capturedTimestamp = ((uint32_t)overflowCount*TCNT_MAX_VALUE) + ICR1;
+    period = (capturedTimestamp > previousTimestamp) ? capturedTimestamp - previousTimestamp : 0;
+    frequency = CLOCK_SPEED / (1 * double(period));
+    // Serial.println(frequency);
+    cycleStart = true;
+    overflowCount = 0;
+  }
+  
   TIFR1 |= _BV(ICF1);
 }
 
@@ -24,10 +30,11 @@ void InputCapture::handleTimerOverflow() {
   TIFR1 |= _BV(TOV1);
 }
 
-uint16_t InputCapture::getCapturedTimestamp() {
+uint32_t InputCapture::getCapturedTimestamp() {
   return capturedTimestamp;
 }
 
-uint32_t InputCapture::getUptime() {
-  return uptime;
+double InputCapture::getSignalFrequency() {
+  return frequency;
 }
+

@@ -27,6 +27,7 @@ void client(int command) {
       serialInterface.waitForData();
       int readData = serialInterface.readData();
       pwmGenerator.setCompareValue(readData);
+      // Serial.println(pwmGenerator.getCompareValue());
     } break;
   }
 }
@@ -36,4 +37,5 @@ void loop() {
   if (readData >= 0) {
     client(readData);
   }
+  
 }
