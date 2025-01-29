@@ -1,10 +1,12 @@
 #include "input_capture.h"
 #include "pwm_generator.h"
 #include "serial_interface.h"
+#include "signal_filter.h"
 
 SerialInterface serialInterface;
 InputCapture inputCapture;
 PWMGenerator pwmGenerator;
+SignalFilter signalFilter;
 
 ISR(TIMER1_OVF_vect) {
   inputCapture.handleTimerOverflow();
@@ -12,6 +14,7 @@ ISR(TIMER1_OVF_vect) {
 
 ISR(TIMER1_CAPT_vect) {
   inputCapture.handleInputCapture();
+  signalFilter.newSample(inputCapture.getSignalFrequency());
 }
 
 void setup() {
