@@ -17,11 +17,9 @@ void InputCapture::handleInputCapture() {
     capturedTimestamp = ((uint32_t)overflowCount*TCNT_MAX_VALUE) + ICR1;
     period = (capturedTimestamp > previousTimestamp) ? capturedTimestamp - previousTimestamp : 0;
     frequency = CLOCK_SPEED / (PRESCALER * double(period));
-    // Serial.println(frequency);
     cycleStart = true;
     overflowCount = 0;
   }
-  
   TIFR1 |= _BV(ICF1);
 }
 

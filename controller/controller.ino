@@ -18,7 +18,6 @@ void setup() {
   serialInterface.init();
   pwmGenerator.init();
   inputCapture.init();
-  pwmGenerator.setCompareValue(0);
 }
 
 void client(int command) {
@@ -37,5 +36,4 @@ void loop() {
   if (readData >= 0) {
     client(readData);
   }
-  
 }
