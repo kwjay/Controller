@@ -1,7 +1,7 @@
 #ifndef INPUT_CAPTURE_H
 #define INPUT_CAPTURE_H
-#define UINT16_MAX 65536
-#define UINT32_MAX 4294967295
+#define TCNT_MAX_VALUE 65536
+
 
 #include <Arduino.h>
 

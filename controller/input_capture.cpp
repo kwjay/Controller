@@ -10,8 +10,10 @@ void InputCapture::init() {
 
 void InputCapture::handleInputCapture() {
   uint32_t previousTimestamp = capturedTimestamp;
-  capturedTimestamp = ((uint32_t)overflowCount*UINT16_MAX) + ICR1;
-  uptime = previousTimestamp - capturedTimestamp;
+  capturedTimestamp = ((uint32_t)(overflowCount*TCNT_MAX_VALUE)) + ICR1;
+  if (capturedTimestamp > previousTimestamp) {
+    uptime = capturedTimestamp - previousTimestamp;
+  } 
   overflowCount = 0;
   ICR1 = 0;
   TIFR1 |= _BV(ICF1);
