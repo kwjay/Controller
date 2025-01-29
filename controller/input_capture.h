@@ -2,6 +2,7 @@
 #define INPUT_CAPTURE_H
 #define TCNT_MAX_VALUE 65536UL
 #define CLOCK_SPEED 16000000.0
+#define PRESCALER 8
 
 #include <Arduino.h>
 
