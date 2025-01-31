@@ -5,7 +5,6 @@ void SerialInterface::init() {
 }
 
 int SerialInterface::readData() {
-  if (Serial.available() <= 0) return -1;
   return Serial.parseInt(SKIP_NONE);
 }
 

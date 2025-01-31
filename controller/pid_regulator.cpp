@@ -1,6 +1,6 @@
 #include "pid_regulator.h"
 
-double PIDRegulator::pid(double measuredValue, double expectedValue) {
+double PIDRegulator::pid(double measured, double expected) {
   double error = expected - measured;
   integral += error;
   double derivative = error - previousError;

@@ -10,11 +10,13 @@ void PWMGenerator::init() {
 }
 
 void PWMGenerator::setCompareValue(int value) {
+  compareValue = value;
+}
+
+void PWMGenerator::updateRegister(int value) {
   if (value > 255) value = 255;
   else if (value < 0) value = 0;
-  compareValue = value;
-  OCR2B = compareValue;
-  
+  OCR2B = value;
 }
 
 int PWMGenerator::getCompareValue() {

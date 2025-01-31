@@ -2,7 +2,7 @@
 #define PID_REGULATOR_H
 
 class PIDRegulator {
-  float kp{}, ki{}, kd{};
+  float kp{100}, ki{}, kd{};
   double integral{};
   double previousError{};
 public:

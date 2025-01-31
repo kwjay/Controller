@@ -2,11 +2,14 @@
 #include "pwm_generator.h"
 #include "serial_interface.h"
 #include "signal_filter.h"
+#include "pid_regulator.h"
 
 SerialInterface serialInterface;
 InputCapture inputCapture;
 PWMGenerator pwmGenerator;
 SignalFilter signalFilter;
+PIDRegulator pidRegulator;
+volatile bool regulateSignal{false};
 
 ISR(TIMER1_OVF_vect) {
   inputCapture.handleTimerOverflow();
@@ -15,6 +18,23 @@ ISR(TIMER1_OVF_vect) {
 ISR(TIMER1_CAPT_vect) {
   inputCapture.handleInputCapture();
   signalFilter.newSample(inputCapture.getSignalFrequency());
+  if (regulateSignal) {
+      double measured = signalFilter.samplesAverage();
+      int expected = expectedValue(pwmGenerator.getCompareValue());
+      double pid = pidRegulator.pid(measured, expected);
+      int compareRegisterValue = compareValueFromFrequency(measured + pid);
+      pwmGenerator.updateRegister(compareRegisterValue);
+  }
+  // Serial.println(String(signalFilter.samplesAverage()) + " " + String(millis()));
+}
+
+double expectedValue(int compareValue) {
+  return 4.718 * compareValue - 624.9;
+}
+
+int compareValueFromFrequency(double frequency) {
+  int compareValue = (frequency + 624.9) / 4.718;
+  return compareValue;
 }
 
 void setup() {
@@ -29,14 +49,23 @@ void client(int command) {
       serialInterface.waitForData();
       int readData = serialInterface.readData();
       pwmGenerator.setCompareValue(readData);
-      // Serial.println(pwmGenerator.getCompareValue());
+      pwmGenerator.updateRegister(pwmGenerator.getCompareValue());
+      // Serial.println(readData);
     } break;
+    case 2: {
+      regulateSignal = !regulateSignal;
+    }
   }
 }
 
 void loop() {
-  int readData = serialInterface.readData();
-  if (readData >= 0) {
-    client(readData);
+  if (Serial.available() <= 0) {
+    Serial.println(String(signalFilter.samplesAverage()) + " " + String(millis()));
+    // Serial.println(String(signalFilter.samplesAverage()));
+    return;
   }
+  int readData = serialInterface.readData();
+  Serial.read();
+  client(readData);
+
 }

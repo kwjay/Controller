@@ -8,6 +8,6 @@ void SignalFilter::newSample(const double sample) {
 double SignalFilter::samplesAverage() {
   double averageValue = 0;
   for (int i = 0; i < NUMBER_OF_SAMPLES; i++) averageValue += samples[i];
-  averageValue /= NUMBER_OF_SAMPLES;
+  averageValue = averageValue / NUMBER_OF_SAMPLES;
   return averageValue;
 }
