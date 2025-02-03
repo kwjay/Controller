@@ -6,11 +6,13 @@ def process_file(file_path: str) -> pd:
         data = []
         for row in raw_data:
             print(row)
-            frequency, time = row.strip().split(" ")
-            data.append({
-                "FREQUENCY": float(frequency),
-                "TIME": int(time)
-            })
+            data_row = row.strip().split(" ")
+            if len(data_row) == 2:
+                frequency, time = data_row
+                data.append({
+                    "FREQUENCY": float(frequency),
+                    "TIME": int(time)
+                })
     return pd.DataFrame(data)
 
 def save_to_file(file_path: str, data: list) -> str:

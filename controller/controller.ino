@@ -22,8 +22,11 @@ ISR(TIMER1_CAPT_vect) {
       double measured = signalFilter.samplesAverage();
       int expected = expectedValue(pwmGenerator.getCompareValue());
       double pid = pidRegulator.pid(measured, expected);
-      int compareRegisterValue = compareValueFromFrequency(measured + pid);
+      double newFrequency = measured + pid;
+      int compareRegisterValue = compareValueFromFrequency(newFrequency);
+      if (abs(compareRegisterValue - pwmGenerator.getCompareValue() > 1))
       pwmGenerator.updateRegister(compareRegisterValue);
+      // Serial.println(String(signalFilter.samplesAverage()) + " " + String(millis()));
   }
   // Serial.println(String(signalFilter.samplesAverage()) + " " + String(millis()));
 }
@@ -50,6 +53,7 @@ void client(int command) {
       int readData = serialInterface.readData();
       pwmGenerator.setCompareValue(readData);
       pwmGenerator.updateRegister(pwmGenerator.getCompareValue());
+      Serial.read();
       // Serial.println(readData);
     } break;
     case 2: {
@@ -60,8 +64,7 @@ void client(int command) {
 
 void loop() {
   if (Serial.available() <= 0) {
-    Serial.println(String(signalFilter.samplesAverage()) + " " + String(millis()));
-    // Serial.println(String(signalFilter.samplesAverage()));
+    // Serial.println(String(signalFilter.samplesAverage()) + " " + String(millis()));
     return;
   }
   int readData = serialInterface.readData();

@@ -4,18 +4,20 @@ from data_extraction import *
 from file_processing import save_to_file, read_and_combine_data
 from file_processing import process_file
 from plot import plot, plot_combined_data
-title_name = "s10_230"
-save_path = "test"
-# save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\signal_filter\data\\' + title_name
+# title_name = "p07i0005d01_200"
+title_name = "pid_200v10"
+# # save_path = "test"
+save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\on_load\PP\\' + title_name
 def run():
     arduino = Arduino()
     arduino.connect('COM7', 115200)
     time.sleep(2)
+    arduino.write('2\n')
     arduino.write('1\n')
     arduino.write('200\n')
-    arduino.write('3\n')
-    data = extract_data(arduino, 3)
-    arduino.write('3\n')
+    data = extract_data(arduino, 30)
+    time.sleep(1)
+    arduino.write('2\n')
     arduino.write('1\n')
     arduino.write('0\n')
     arduino.disconnect()
@@ -37,9 +39,9 @@ def run_plus(tempo:str):
     average = sum(data) / len(data)
     return average
 
-def plotting():
-    data = process_file(save_path)
-    plot(data, save_path, 'xd')
+def plotting(given_path):
+    data = process_file(given_path)
+    plot(data, given_path, 'xd', y_bottom=0, y_top=700)
 
 def analise():
     data = []
@@ -51,7 +53,15 @@ def analise():
     save_to_file('Characteristics', data)
 
 run()
-plotting()
+plotting(save_path)
+# save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\\' + title_name
+# plotting(save_path)
+# title_name = "p05i0d0_230"
+# save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\\' + title_name
+# plotting(save_path)
+# title_name = "p1i0d0_230"
+# save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\\' + title_name
+# plotting(save_path)
 # import os
 # directory = r"C:\Users\kwjay\Documents\GitHub\Controller\data\ICR_prescaler\data"
 # file_paths = [
