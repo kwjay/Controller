@@ -5,9 +5,9 @@ from file_processing import save_to_file, read_and_combine_data
 from file_processing import process_file
 from plot import plot, plot_combined_data
 # title_name = "p07i0005d01_200"
-title_name = "pid_200v10"
+title_name = "pid_200v1"
 # # save_path = "test"
-save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\on_load\PP\\' + title_name
+save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\on_load\PE\\' + title_name
 def run():
     arduino = Arduino()
     arduino.connect('COM7', 115200)
