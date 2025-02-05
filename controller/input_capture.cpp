@@ -10,11 +10,11 @@ void InputCapture::init() {
 
 void InputCapture::handleInputCapture() {
   if (cycleStart) {
-    capturedTimestamp = ((uint32_t)overflowCount*TCNT_MAX_VALUE) + ICR1;
+    capturedTimestamp = uint32_t(overflowCount*TCNT_MAX_VALUE) + ICR1;
     cycleStart = false;
   } else {
     uint32_t previousTimestamp = capturedTimestamp;
-    capturedTimestamp = ((uint32_t)overflowCount*TCNT_MAX_VALUE) + ICR1;
+    capturedTimestamp = uint32_t(overflowCount*TCNT_MAX_VALUE) + ICR1;
     period = (capturedTimestamp > previousTimestamp) ? capturedTimestamp - previousTimestamp : 0;
     frequency = CLOCK_SPEED / (PRESCALER * double(period));
     cycleStart = true;
