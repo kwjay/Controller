@@ -5,9 +5,9 @@ from file_processing import save_to_file, read_and_combine_data
 from file_processing import process_file
 from plot import plot, plot_combined_data
 # title_name = "p07i0005d01_200"
-title_name = "pid_200v1"
-# # save_path = "test"
-save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\on_load\PE\\' + title_name
+# title_name = "prescaler"
+# save_path = "test"
+# save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\on_load\PE\\' + title_name
 def run():
     arduino = Arduino()
     arduino.connect('COM7', 115200)
@@ -41,7 +41,7 @@ def run_plus(tempo:str):
 
 def plotting(given_path):
     data = process_file(given_path)
-    plot(data, given_path, 'xd', y_bottom=0, y_top=700)
+    plot(data, given_path, '', y_bottom=0, y_top=700)
 
 def analise():
     data = []
@@ -52,8 +52,14 @@ def analise():
         print(data)
     save_to_file('Characteristics', data)
 
-run()
+# run()
+save_path = 
 plotting(save_path)
+
+
+
+
+
 # save_path = r'C:\Users\kwjay\Documents\GitHub\Controller\data\pid\data\\' + title_name
 # plotting(save_path)
 # title_name = "p05i0d0_230"
