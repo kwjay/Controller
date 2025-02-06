@@ -19,8 +19,8 @@ def process_characteristics(file_path):
     y_fit = poly_func(x_fit)
 
     # Plot
-    plt.scatter(x, y, label="Original Data", s=5)
-    plt.plot(x_fit, y_fit, label=f"Poly Fit: {poly_func}", color="red")
+    plt.scatter(x, y, label="Częstotliwość", s=5)
+    plt.plot(x_fit, y_fit, label=f"Regresja liniowa", color="red")
     plt.legend()
     plt.savefig('LINEAR REG')
     plt.show()
